@@ -9,8 +9,6 @@ This project demonstrates how to accelerate financial Monte Carlo simulations us
 - Performance benchmarking and precision comparison
 - Visualization of error curves and execution times
 
-## File Structure
-
 ## Usage
 1. Install dependencies:
 ```bash
