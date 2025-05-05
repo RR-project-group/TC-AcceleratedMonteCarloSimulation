@@ -29,3 +29,23 @@ python main.py
 ## Notes
 - Ensure a CUDA-capable GPU or bf16 precision supported TPU is available for best results
 - If running on CPU-only, modify the `device` to `'cpu'` in `main.py`
+
+## Reference
+
+This project is a reproduction of this work:
+
+**Rasch, A., & Gauckler, L. (2020). Tensor Processing Units for Financial Monte Carlo.**  
+*In International Conference on High Performance Computing (pp. 1–12).*  
+[SIAM DOI: 10.1137/1.9781611976137.2](https://epubs.siam.org/doi/abs/10.1137/1.9781611976137.2)
+<details>
+<summary>BibTeX</summary>
+```bibtex
+@inproceedings{rasch2020tpu,
+  author = {Rasch, Andreas and Gauckler, Ludwig},
+  title = {Tensor Processing Units for Financial Monte Carlo},
+  booktitle = {Proceedings of the Platform for Advanced Scientific Computing Conference},
+  year = {2020},
+  publisher = {SIAM},
+  doi = {10.1137/1.9781611976137.2},
+  url = {https://epubs.siam.org/doi/abs/10.1137/1.9781611976137.2}
+}
