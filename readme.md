@@ -1,6 +1,6 @@
 # Monte Carlo Simulation with PyTorch (Black-Scholes & LMM)
 
-This project demonstrates how to accelerate financial Monte Carlo simulations using PyTorch. We implement both baseline and low-precision (bfloat16) variants to mimic Tensor Core-style acceleration.
+This project demonstrates how to accelerate financial Monte Carlo simulations using PyTorch. We implement both baseline and low-precision (bfloat16) version. We also leaverage Tensor Core acceleration for the execution speed optimization.
 
 ## Features
 - Black-Scholes option pricing with Monte Carlo simulation
