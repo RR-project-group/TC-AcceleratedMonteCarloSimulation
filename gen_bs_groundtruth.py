@@ -1,4 +1,3 @@
-# Auto-install dependencies if missing
 import subprocess
 import sys
 
@@ -36,8 +35,8 @@ def bs_analytic(S0, K, r, sigma, T):
     d2 = d1 - sigma * np.sqrt(T)
     return S0 * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
 
-# Optional: Example usage block
-""" if __name__ == "__main__":
-    S0, K, r, sigma, T = 100, 105, 0.05, 0.2, 1.0
+# Optional test: Vanilla european call option (reference example)
+if __name__ == "__main__":
+    S0, K, r, sigma, T = 100, 120, 0.05, 0.2, 1.0
     true_price = bs_analytic(S0, K, r, sigma, T)
-    print(f"Black-Scholes Analytical Price: {true_price:.6f}") # 8.021352 for GPU & TPU """
+    print(f"Black-Scholes Analytical Price: {true_price:.11f}") # 3.24747741656(TPU&GPU&CPU) 
