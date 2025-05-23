@@ -6,7 +6,7 @@ def black_scholes_mc(S0, K, T, r, sigma, N, dtype=torch.float32, device='cuda'):
     Z = torch.randn(N, dtype=dtype, device=device)
     ST = S0 * torch.exp((r - 0.5 * sigma ** 2) * T + sigma * torch.sqrt(torch.tensor(T, dtype=dtype)) * Z)
     payoff = F.relu(ST - K)
-    return torch.exp(torch.tensor(-r * T, dtype=dtype, device=device)) * payoff.mean()
+    return torch.exp(-r * T) * payoff.mean()
 
 def run_bs_experiment(Ns, precision, device='cuda'):
     S0, K, T, r, sigma = 100, 100, 1, 0.05, 0.2
