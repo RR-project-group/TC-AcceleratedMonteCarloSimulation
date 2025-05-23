@@ -1,31 +1,36 @@
 # Verify the environment
-""" import torch
-print(torch.__version__)
-print(torch.cuda.is_available())
-print(torch.cuda.get_device_name(0) if torch.cuda.is_available() else "No GPU detected") """
-# Verify the environment
 import torch
 
-def detect_environment():
+def detect_environment() -> str:
+    """Detects and returns the available hardware environment for PyTorch.
+    
+    Returns:
+        str: The detected environment type - 'tpu', 'cuda' (GPU), or 'cpu'.
+    """
+    # Print PyTorch version for debugging/info purposes
     print(f"PyTorch version: {torch.__version__}")
     
-    # Try TPU first
+    # Check for TPU (Tensor Processing Unit) availability first
     try:
         import torch_xla.core.xla_model as xm
-        tpu_device = xm.xla_device()
+        tpu_device = xm.xla_device()  # Attempt to get TPU device
         print("Environment: TPU")
-        return
+        return 'tpu'  # Return early if TPU is found
     except ImportError:
         print("TPU support not installed (torch_xla)")
     except RuntimeError:
         print("TPU not available")
 
-    # Then check GPU
+    # Check for CUDA (NVIDIA GPU) availability
     if torch.cuda.is_available():
         print("Environment: GPU")
-        print(f"GPU name: {torch.cuda.get_device_name(0)}")
-    else:
-        print("Environment: CPU")
+        # Print the name of the first available GPU
+        print(f"GPU name: {torch.cuda.get_device_name(0)}") 
+        return 'cuda'  # Return if GPU is available
+    
+    # Default case - CPU fallback
+    print("Environment: CPU")
+    return 'cpu'
 
-detect_environment()
+# detect_environment()
 
