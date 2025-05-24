@@ -24,9 +24,14 @@ def run_lmm_benchmark():
     }
 
     # Load ground truth data (float32-based reference)
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+    except NameError:
+        base_dir = os.getcwd()
+
     result_dir = os.path.join(base_dir, 'LMMresult')
     os.makedirs(result_dir, exist_ok=True)
+
     gt_path = os.path.join(result_dir, f"lmm_groundtruth_{env}.csv")
 
     groundtruth = torch.tensor(
