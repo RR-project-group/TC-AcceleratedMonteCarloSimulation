@@ -32,7 +32,7 @@ def run_lmm_benchmark():
     result_dir = os.path.join(base_dir, 'LMMresult')
     os.makedirs(result_dir, exist_ok=True)
 
-    gt_path = os.path.join(result_dir, f"lmm_groundtruth_{env}.csv")
+    gt_path = os.path.join(result_dir, f"lmm_groundtruth_cpu.csv")
 
     groundtruth = torch.tensor(
         pd.read_csv(gt_path).values,
