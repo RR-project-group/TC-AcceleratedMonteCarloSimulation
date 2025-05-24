@@ -20,8 +20,12 @@ def generate_and_save_groundtruth(n_paths=100000, dim=16, num_factors=8, save_di
     env = device or detect_environment()
     groundtruth = simulate_groundtruth_paths(n_paths=n_paths, dim=dim, num_factors=num_factors, device=env)
 
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    result_dir = os.path.join(base_dir, save_dir)
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+    except NameError:
+        base_dir = os.getcwd()
+
+    result_dir = os.path.join(base_dir, 'LMMresult')
     os.makedirs(result_dir, exist_ok=True)
 
     save_path = os.path.join(result_dir, f"{filename_prefix}_{env}.csv")
@@ -30,4 +34,4 @@ def generate_and_save_groundtruth(n_paths=100000, dim=16, num_factors=8, save_di
 
     print(f"Saved ground truth LMM paths to {save_path}")
     return save_path, groundtruth
-save_path, gt_tensor = generate_and_save_groundtruth()
+# save_path, gt_tensor = generate_and_save_groundtruth()
