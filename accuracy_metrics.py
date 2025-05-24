@@ -35,15 +35,24 @@ def benchmark(model_fn, params: dict, n_runs: int = 10) -> pd.DataFrame:
     - pd.DataFrame: A DataFrame with each run's ID and corresponding error metrics.
     """
     records = []
-    # Remove 'true_price' before calling model_fn
     model_params = {k: v for k, v in params.items() if k != 'true_price'}
     
-    # Ensure true_price is a Tensor (only once)
-    true_tensor = torch.tensor(params['true_price'], dtype=model_params['dtype'], device=model_params.get('device', 'cpu'))
+    true_tensor = params.get('true_price')
+    if true_tensor is not None:
+        true_tensor = torch.tensor(true_tensor, dtype=model_params['dtype'], device=model_params.get('device', 'cpu'))
 
     for i in range(n_runs):
-        pred = model_fn(**model_params)  # Call model to get predictions
-        err = compute_errors(true_tensor, pred)  # Compute error metrics
-        records.append({'run_id': i, **err})  # Store results
+        try:
+            pred = model_fn(**model_params)  # Call model to get predictions
+            if pred is None:
+                print(f"[Warning] Run {i+1}: Prediction is None — skipping.")
+                continue
+
+            err = compute_errors(true_tensor, pred)  # Compute error metrics
+            records.append({'run_id': i, **err})  # Store results
+
+        except Exception as e:
+            print(f"[Error] Run {i+1} failed: {e}")
+            continue
 
     return pd.DataFrame(records)
