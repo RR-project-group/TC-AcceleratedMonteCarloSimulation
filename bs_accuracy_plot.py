@@ -14,11 +14,11 @@ DATA_DIR = os.path.join(BASE_DIR, 'BSresult')  # Automatically adapts the path, 
 # Map filenames to labels for plotting
 file_map = {
     'bs_fp32_cpu.csv': 'CPU-fp32',
-    'bs_bf16_cpu.csv': 'CPU-bf16',
     'bs_fp32_cuda.csv': 'GPU-fp32',
-    'bs_bf16_cuda.csv': 'GPU-bf16',
     'bs_fp32_tpu.csv': 'TPU-fp32',
-    'bs_bf16_tpu.csv': 'TPU-bf16',
+    'bs_bf16_cpu.csv': 'CPU-bf16',
+    'bs_bf16_cuda.csv': 'GPU-bf16',
+    'bs_bf16_tpu.csv': 'TPU-bf16',      
 }
 
 # Load and label data
@@ -57,7 +57,7 @@ plt.tight_layout()
 plt.savefig(os.path.join(DATA_DIR, 'BS_average_error_barplot.png'))
 plt.close()
 
-# Plot 3: Line plot for MSE evolution (optional)
+# Plot 3: Line plot for MSE evolution 
 plt.figure(figsize=(10, 6))
 sns.lineplot(data=data, x='run_id', y='MSE', hue='Setting')
 plt.title('BS - MSE Over Runs')
