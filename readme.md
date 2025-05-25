@@ -12,7 +12,13 @@ This project demonstrates how to accelerate financial Monte Carlo simulations us
 ## Usage
 1. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/RR-project-group/TC-AcceleratedMonteCarloSimulation/blob/main/main.ipynb)
 
-2. Outputs:
+2. To connect to a TPU runtime in Google Colab, follow these steps:
+- Go to the menu bar, click on Runtime → Change runtime type.
+- In the popup window, under Hardware accelerator, select TPU.
+- Click Save.
+- After that, your notebook is connected to a TPU runtime. You can verify by running:
+
+3. Outputs:
 - Visualizes relative error between bfloat16 and float32
 - Runtime comparison of both precisions
 

@@ -12,9 +12,6 @@ def generate_correlation_matrix(N, rho=0.5):
             corr[i, j] = rho ** abs(i - j)
     return corr
 
-corr_np = generate_correlation_matrix(N)
-cov_np = corr_np
-
 def sample_normals(shape, dtype):
     samples = tf.random.normal(shape, dtype=tf.float32)
     return tf.cast(samples, dtype)
