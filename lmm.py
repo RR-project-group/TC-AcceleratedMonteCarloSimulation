@@ -1,25 +1,36 @@
-import torch
+import tensorflow as tf
+import numpy as np
+import time
+import matplotlib.pyplot as plt
+import os
+import pandas as pd
 
-def generate_cov_matrix(num_factors, dim, dtype, device):
-    A = torch.randn(dim, num_factors, dtype=dtype, device=device)
-    return A @ A.T
+def generate_correlation_matrix(N, rho=0.5):
+    corr = np.zeros((N, N), dtype=np.float32)
+    for i in range(N):
+        for j in range(N):
+            corr[i, j] = rho ** abs(i - j)
+    return corr
 
-def simulate_paths(L, n_paths, dtype, device):
-    Z = torch.randn(n_paths, L.shape[0], dtype=dtype, device=device)
-    return Z @ L.T
+corr_np = generate_correlation_matrix(N)
+cov_np = corr_np
 
-def run_lmm_experiment(n_paths, dim, num_factors, precision, device='cuda'):
-    dtype = torch.float32 if precision == 'fp32' else torch.bfloat16
-    cov = generate_cov_matrix(num_factors, dim, dtype, device)
-    L = torch.linalg.cholesky(cov)
+def sample_normals(shape, dtype):
+    samples = tf.random.normal(shape, dtype=tf.float32)
+    return tf.cast(samples, dtype)
 
-    start = torch.cuda.Event(enable_timing=True)
-    end = torch.cuda.Event(enable_timing=True)
+@tf.function
+def simulate_lmm_paths(cov, paths, T, N, dtype):
+    cov_float32 = tf.cast(cov, tf.float32)
+    chol = tf.linalg.cholesky(cov_float32)
+    if dtype == tf.bfloat16:
+        chol = tf.cast(chol, tf.bfloat16)
 
-    start.record()
-    paths = simulate_paths(L, n_paths, dtype, device)
-    end.record()
-    torch.cuda.synchronize()
-
-    elapsed_time = start.elapsed_time(end)
-    return paths, elapsed_time
+    normals = sample_normals((paths, T, N), dtype)
+    libor_t = tf.ones((paths, N), dtype=dtype)
+    paths_arr = []
+    for t in range(T):
+        z = tf.matmul(normals[:, t, :], chol, transpose_b=True)
+        libor_t = libor_t * tf.exp(-0.5 * 0.01 + 0.01 * z)
+        paths_arr.append(libor_t)
+    return tf.stack(paths_arr, axis=1)

@@ -8,7 +8,7 @@ This is a team project for reproducing key ideas and experiments from the paper:
 Andreas Rasch and Ludwig Gauckler, SIAM 2020  
 [DOI: 10.1137/1.9781611976137.2](https://epubs.siam.org/doi/abs/10.1137/1.9781611976137.2)
 
-We aim to recreate the numerical experiments in PyTorch, focusing on:
+We aim to recreate the numerical experiments in Tensorflow, focusing on:
 
 - Monte Carlo simulation for financial models: **Black-Scholes (BS)** and **Libor Market Model (LMM)**
 - Reproducing performance and accuracy benchmarks
@@ -52,14 +52,14 @@ We aim to recreate the numerical experiments in PyTorch, focusing on:
 
 ### 🚀 Member B — **Performance Testing + Benchmarking**
 
-- Builds timing functions (e.g., using `time`, `perf_counter`, `torch.cuda.Event`)
+- Builds timing functions (e.g., using `time`)
 - Benchmarks:
   - Runtime under different simulation sizes
   - Float32 vs bfloat16 performance
 - Outputs performance plots:
   - Time vs number of paths
   - Speedup ratio between precisions
-- Optional: explore PyTorch benchmarking tools
+- Optional: explore Tensorflow benchmarking tools
 
 ---
 
@@ -87,7 +87,7 @@ We aim to recreate the numerical experiments in PyTorch, focusing on:
 - Use feature branches: `feature/bs`, `test/accuracy`, etc.
 - Weekly merge to `main` by team lead
 - Dependencies:
-- Python 3.9+, PyTorch, Matplotlib
+- Python 3.9+, Tensorflow, Matplotlib
 - Each member should:
 - Write modular, testable code
 - Document function inputs/outputs

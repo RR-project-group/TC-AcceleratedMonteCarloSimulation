@@ -1,29 +1,31 @@
-import torch
-import torch.nn.functional as F
 
-def black_scholes_mc(S0, K, T, r, sigma, N, dtype=torch.float32, device='cuda'):
-    S0 = torch.tensor(S0, dtype=dtype, device=device)
-    Z = torch.randn(N, dtype=dtype, device=device)
-    ST = S0 * torch.exp((r - 0.5 * sigma ** 2) * T + sigma * torch.sqrt(torch.tensor(T, dtype=dtype)) * Z)
-    payoff = F.relu(ST - K)
-    return torch.exp(torch.tensor(-r * T, dtype=dtype, device=device)) * payoff.mean()
+import tensorflow as tf
+import numpy as np
+import time
+import matplotlib.pyplot as plt
+import os
+import pandas as pd
 
-def run_bs_experiment(Ns, precision, device='cuda'):
-    S0, K, T, r, sigma = 100, 100, 1, 0.05, 0.2
-    dtype = torch.float32 if precision == 'fp32' else torch.bfloat16
-    prices, times = [], []
+# ===== Monte Carlo simulation =====
+@tf.function
+def monte_carlo_bs_tpu(S0, K, T, r, sigma, n_paths, n_steps, dtype=tf.float32, seed=(0,0)):
+    dt = T / n_steps
+    # generate random numbers
+    z = tf.random.stateless_normal(shape=(n_paths, n_steps), seed=seed, dtype=dtype)
+    # generate log returns
+    log_returns = ((r - 0.5 * sigma**2) * dt + sigma * tf.sqrt(dt) * z)
+    log_paths = tf.cumsum(log_returns, axis=1)
+    ST = S0 * tf.exp(log_paths[:, -1])  # final price
+    payoff = tf.nn.relu(ST - K)
+    price = tf.exp(-r * T) * tf.reduce_mean(payoff)
+    return price
 
-    for N in Ns:
-        start = torch.cuda.Event(enable_timing=True)
-        end = torch.cuda.Event(enable_timing=True)
+def run_bs_simulation(n_paths, n_steps, dtype=tf.float32, seed=(42, 42)):
+    S0 = tf.constant(100.0, dtype=dtype)
+    K = tf.constant(120.0, dtype=dtype)
+    T = tf.constant(1.0, dtype=dtype)
+    r = tf.constant(0.05, dtype=dtype)
+    sigma = tf.constant(0.2, dtype=dtype)
 
-        start.record()
-        price = black_scholes_mc(S0, K, T, r, sigma, N, dtype=dtype, device=device)
-        end.record()
-        torch.cuda.synchronize()
+    return tf.cast(monte_carlo_bs_tpu(S0, K, T, r, sigma, n_paths, n_steps, dtype=dtype, seed=seed), tf.float32)
 
-        elapsed_time = start.elapsed_time(end)
-        prices.append(price.item())
-        times.append(elapsed_time)
-
-    return prices, times

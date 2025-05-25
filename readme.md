@@ -1,6 +1,6 @@
-# Monte Carlo Simulation with PyTorch (Black-Scholes & LMM)
+# Monte Carlo Simulation with Tensorflow (Black-Scholes & LMM)
 
-This project demonstrates how to accelerate financial Monte Carlo simulations using PyTorch. We implement both baseline and low-precision (bfloat16) version. We also leaverage Tensor Core acceleration for the execution speed optimization.
+This project demonstrates how to accelerate financial Monte Carlo simulations using Tensorflow. We implement both baseline and low-precision (bfloat16) version. We also leaverage Tensor Core acceleration for the execution speed optimization.
 
 ## Features
 - Black-Scholes option pricing with Monte Carlo simulation
@@ -10,23 +10,14 @@ This project demonstrates how to accelerate financial Monte Carlo simulations us
 - Visualization of error curves and execution times
 
 ## Usage
-1. Install dependencies:
-```bash
-pip install torch matplotlib
-```
+1. [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/RR-project-group/TC-AcceleratedMonteCarloSimulation/blob/main/main.ipynb)
 
-2. Run the benchmark:
-```bash
-python main.py
-```
-
-3. Outputs:
-- `precision_curve.png`: Visualizes relative error between bfloat16 and float32
-- `performance_comparison.png`: Runtime comparison of both precisions
+2. Outputs:
+- Visualizes relative error between bfloat16 and float32
+- Runtime comparison of both precisions
 
 ## Notes
-- Ensure a CUDA-capable GPU or bf16 precision supported TPU is available for best results
-- If running on CPU-only, modify the `device` to `'cpu'` in `main.py`
+- Ensure a Colab TPU backend is available for best results
 
 ## Reference
 
